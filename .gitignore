@@ -36,3 +36,29 @@ testing/model.pkl
 
 
 .ruff_cache
+
+# temporary ONNX files written by the sysid tests / examples
+testing/_onnx_tmp_*/
+examples/lstm_surrogate_model/_tmp/
+
+__pycache__/
+
+# byproducts of test_CSTR_approx_MPC.py (Sampler / Trainer default dirs,
+# relative to the testing/ working directory). Fully regenerable.
+testing/sampling/
+testing/training/
+
+# Python packaging build artifacts
+# (note: 'documentation/build/' above is path-specific and does NOT cover the
+#  root build/ that setuptools creates)
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# IDE project settings (local to each developer)
+.idea/
+
+# byproduct of test_lstm_surrogate_model.py (do_mpc.data.save_results output,
+# regenerated on every run; the golden file results_lstm_surrogate.pkl IS tracked)
+testing/results/test_save_lstm.pkl

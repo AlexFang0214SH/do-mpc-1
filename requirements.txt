@@ -3,3 +3,7 @@ scipy
 numpy
 matplotlib
 pandas
+# imported unconditionally at the top of do_mpc/__init__.py, so it is a core
+# dependency. It currently arrives transitively via matplotlib>=packaging, but
+# relying on that is fragile (and breaks under `pip install --no-deps`).
+packaging
