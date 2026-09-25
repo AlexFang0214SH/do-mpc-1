@@ -1,6 +1,16 @@
 
 *.pyc
 
+*.pkl
+
+# Golden reference data that IS tracked on purpose: the test suite loads
+# testing/results/*.pkl through do_mpc.data.load_results() and the documentation
+# build reads documentation/source/results/*.pkl, so the blanket "*.pkl" above
+# must not apply to them. The byproduct rules further below are more specific
+# and come later, so they still win for files the tests write at runtime.
+!testing/results/*.pkl
+!documentation/source/results/*.pkl
+
 */.ipynb_checkpoints/
 
 docs/source/.ipynb_checkpoints/
@@ -24,16 +34,22 @@ examples/conti_discrete/main.py
 testing/results/test_save.pkl
 
 examples/**/*.pkl
+# Tracked golden result of the CSTR example. This must stay below
+# 'examples/**/*.pkl' - the last matching pattern wins in .gitignore.
+!examples/CSTR/results/CSTR_robust_MPC.pkl
 documentation/source/example_gallery/**/*.pkl
 !documentation/source/example_gallery/sampling_notebook/my_dataset/*.pkl
 !documentation/source/example_gallery/training_notebook/results_my_dataset/*.pkl
 testing/sample_results/*.pkl
 
+# Trainer / Sampler output of examples/CSTR_approximate_mpc (approx_mpc.pth,
+# training_history.json/png, hyperparameters.json, ...). Regenerable. It lives in
+# a subdirectory, so a single-level "training/*" pattern would not match it.
+training/
+
 testing/model.pkl
 
 .venv/
-
-
 
 .ruff_cache
 
@@ -62,3 +78,6 @@ build/
 # byproduct of test_lstm_surrogate_model.py (do_mpc.data.save_results output,
 # regenerated on every run; the golden file results_lstm_surrogate.pkl IS tracked)
 testing/results/test_save_lstm.pkl
+
+# written by testing/test_graphics.py next to the golden results
+testing/results/test_graphics_tmp.pkl
