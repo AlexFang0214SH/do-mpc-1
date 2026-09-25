@@ -484,6 +484,13 @@ class NLPDifferentiator:
             if lin_solver == 'scipy':
                 logging.info("Solving linear system with Scipy.")
                 param_sens = sp_sparse.linalg.spsolve(A_num.tocsc(),-B_num.tocsc())
+                # scipy.sparse.linalg.spsolve collapses a single right-hand-side
+                # column into a 1-D ndarray, while a multi-column right-hand side
+                # comes back as a sparse matrix. The mapping functions below index
+                # param_sens as (n_z, n_p), so normalise the shape here. Without
+                # this, lin_solver='scipy' raises IndexError whenever n_p == 1.
+                if not sp_sparse.issparse(param_sens):
+                    param_sens = np.asarray(param_sens).reshape(A_num.shape[0], B_num.shape[1])
 
             elif lin_solver == 'casadi':
                 logging.info("Solving linear system with Casadi.")
